@@ -11,6 +11,9 @@ var companyRouter = require('./routes/company');
 var credentialsRouter = require('./routes/credentials');
 var medicalRouter = require('./routes/medical');
 var profilRouter = require('./routes/profil');
+var licenseRoute = require('./routes/license');
+var license_detailsRoute = require('./routes/license_details');
+var rating_detailsRoute = require('./routes/rating_details');
 
 var app = express();
 
@@ -29,7 +32,10 @@ app.use('/users', usersRouter);
 app.use('/company', companyRouter);
 app.use('/credentials', credentialsRouter);
 app.use('/medical', medicalRouter);
-app.use('/profil', profilRouter)
+app.use('/profil', profilRouter);
+app.use('/license', licenseRoute);
+app.use('/license_details', license_detailsRoute);
+app.use('/rating_details', rating_detailsRoute);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
