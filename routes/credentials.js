@@ -16,9 +16,14 @@ router.get('/', function(req, res, next){
 router.post('/save', function(req, res, next){
     client.connect().then(() => {
         const ar = `INSERT INTO credentials(email, password, last_login) VALUES('${req.body.email}', '${req.body.password}', '${req.body.last_login}');`
-        client.query(ar).then(() => {
+        client.query(ar)
+        .then(() => {
             client.end()
             res.send('Credentials details saved!')
+        })
+        .catch((err) => {
+            client.end()
+            console.log(err)
         })
     })
 })

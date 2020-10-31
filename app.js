@@ -14,6 +14,7 @@ var profilRouter = require('./routes/profil');
 var licenseRoute = require('./routes/license');
 var license_detailsRoute = require('./routes/license_details');
 var rating_detailsRoute = require('./routes/rating_details');
+const cors = require('cors');
 
 var app = express();
 
@@ -26,7 +27,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(cors())
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/company', companyRouter);

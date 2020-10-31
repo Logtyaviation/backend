@@ -16,9 +16,14 @@ router.get('/', function(req, res, next){
 router.post('/save', function(req, res, next){
     client.connect().then(() => {
         const ar = `INSERT INTO license_details(license_number, date_of_issue, expiration_date, elp, elp_expiration, remarks) VALUES('${req.body.license_number}', '${req.body.date_of_issue}', '${req.body.expiration_date}', '${req.body.elp}', '${req.body.elp_expiration}', '${req.body.remarks}');`
-        client.query(ar).then(() => {
+        client.query(ar)
+        .then(() => {
             client.end()
             res.send('License details data saved!')
+        })
+        .catch((err) => {
+            client.end()
+            console.log(err)
         })
     })
 })

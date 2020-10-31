@@ -16,9 +16,14 @@ router.get('/', function(req, res, next){
 router.post('/save', function(req, res, next){
     client.connect().then(() => {
         const ar = `INSERT INTO rating_details(rating_expiration, rating_remarks) VALUES('${req.body.rating_expiration}', '${req.body.rating_remarks}');`
-        client.query(ar).then(() => {
+        client.query(ar)
+        .then(() => {
             client.end()
             res.send('Rating details data saved!')
+        })
+        .catch((err) => {
+            client.end()
+            console.log(err)
         })
     })
 })

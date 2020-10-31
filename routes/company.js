@@ -16,9 +16,14 @@ router.get('/', function(req, res, next){
 router.post('/save', function(req, res, next){
     client.connect().then(() => {
         const ar = `INSERT INTO company(airline, rank) VALUES('${req.body.airline}', '${req.body.rank}');`
-        client.query(ar).then(() => {
+        client.query(ar)
+        .then(() => {
             client.end()
             res.send('Company details saved!')
+        })
+        .catch((err) => {
+            client.end()
+            console.log(err)
         })
     })
 })

@@ -17,11 +17,16 @@ router.get('/', function(req, res, next) {
 router.post('/register', function(req, res, next) {
   client.connect().then(() => {
     const q = `INSERT INTO users(email, password) VALUES('${req.body.email}', '${req.body.password}');`
-    client.query(q).then(() => {
+    client.query(q)
+    .then(() => {
       client.end()
       res.send('Success!')
     })
-  } )
+    .catch((err) => {
+      client.end()
+      console.log(err)
+  })
+  })
 });
 
 module.exports = router;
