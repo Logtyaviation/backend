@@ -10,13 +10,33 @@ var usersRouter = require('./routes/users');
 var companyRouter = require('./routes/company');
 var credentialsRouter = require('./routes/credentials');
 var medicalRouter = require('./routes/medical');
-var profilRouter = require('./routes/profil');
+var profileRouter = require('./contexts/profile/routes/profile');
 var licenseRoute = require('./routes/license');
-var license_detailsRoute = require('./routes/license_details');
-var rating_detailsRoute = require('./routes/rating_details');
+var accountRouter = require('./contexts/account/routes/account');
+
+
+var session = require('express-session')
+
 const cors = require('cors');
 
+ 
+
+
 var app = express();
+
+app.set('trust proxy', 1) // trust first proxy
+const expiryDate = 60*60*1000*24 // 24 hours
+app.use(session({
+  name: 'logty-session',
+  secret: 'asbaflux',
+  cookie: {
+    secure: false,
+    httpOnly: true,
+    expires: expiryDate
+  },
+  resave: false, 
+  saveUninitialized: false
+}))
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -27,16 +47,27 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors())
+app.use(cors({credentials: true, origin: 'http://localhost:5000'}))
+
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Origin, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, X-Response-Time, X-PINGOTHER, X-CSRF-Token,Authorization');
+  if (req.method === "OPTIONS") {
+      return res.status(200).end();
+  } else {
+      next();
+  }
+});
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/company', companyRouter);
 app.use('/credentials', credentialsRouter);
 app.use('/medical', medicalRouter);
-app.use('/profil', profilRouter);
+app.use('/profile', profileRouter);
 app.use('/license', licenseRoute);
-app.use('/license_details', license_detailsRoute);
-app.use('/rating_details', rating_detailsRoute);
+app.use('/account', accountRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
