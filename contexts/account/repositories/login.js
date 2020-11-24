@@ -10,7 +10,7 @@ const pool = new Pool ({
 
 
 async function getUserByEmail(email) {
-    const query = "SELECT * FROM users LEFT JOIN credentials ON users.credentials_id = credentials_id WHERE credentials.email = $1";
+    const query = "SELECT DISTINCT users.*, credentials.email, credentials.password FROM users FULL OUTER JOIN credentials ON users.credentials_id = credentials.id WHERE credentials.email=$1";
     return pool.query(query, [email])
 }
 

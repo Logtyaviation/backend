@@ -8,7 +8,7 @@ const pool = new Pool ({
 });
 
 async function createProfil() {
-    const createProfilQuery = "INSERT INTO profile(first_name, last_name, date_of_birth) VALUES('', '' , '') RETURNING *"
+    const createProfilQuery = "INSERT INTO profile(first_name, last_name, other_last_name, other_first_name, date_of_birth) VALUES('', '' , '') RETURNING *"
     return pool.query(createProfilQuery);
 }
 

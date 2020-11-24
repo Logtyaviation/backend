@@ -13,7 +13,7 @@ function register(req, res) {
         }
         registerRepository.createNewUser(email, password)
         .then(result => {
-            res.send('You account has been created!')
+            res.send('Your account has been created!')
         })
     })
     .catch(error => res.status(400).send(error.message))
